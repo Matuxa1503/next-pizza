@@ -3,4 +3,6 @@ export { Container } from './Container';
 export { Title } from './Title';
 export { Categories } from './Categories';
 export { SortPopup } from './Sort-popup';
+export { FilterCheckbox } from './Filter-checkbox';
+export { Filters } from './Filters';
 export { TopBar } from './Top-bar';
