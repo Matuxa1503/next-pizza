@@ -8,13 +8,68 @@ datasource db {
 	directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-	// syntax prisma model: name field, type field and another data
+	// syntax prisma model: name field, type field and another data. @relation don't use in DB
+enum UserRole {
+	USER
+	ADMIN
+}
+
 model User {
 	id Int @id @default(autoincrement())
 
 	fullName String
-	email String
-	password String
+	email String @unique
+	password String @unique
+	role UserRole @default(USER)
+
+	provider String? // register through GitHub, gmail and etc social media
+	providerId String?
+
+	cart Cart? // relation User <--> Cart (one to one)
+	orders Order[] // relation User <--> Order (one to many)
+	verificationCode VerificationCode? // relation User <--> VerificationCode (one to one)
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+model Cart {
+	id Int @id @default(autoincrement())
+
+	totalAmount Int @default(0)
+	token String 
+	items CartItem[] // relation Cart <--> CartItem (one to many)
+
+	user User? @relation(fields: [userId], references: [id]) // relation User <--> Cart (one to one)
+	userId Int? @unique
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+	id Int @id @default(autoincrement())
+
+	quantity Int
+
+	variationItem Variation? @relation(fields: [variationId], references: [id]) // relation Variation <--> CartItem (one to many)
+	variationId Int
+
+	cart Cart @relation(fields: [cartId], references: [id]) // relation Cart <--> CartItem (one to many)
+	cartId Int
+
+	ingredients Ingredient[] // relation Ingredient <--> CartItem (many to many)
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+model Category {
+	id Int @id @default(autoincrement())
+
+	name String @unique
+	products Product[] // relation Category <--> Products (one to many)
+
 	createdAt DateTime @default(now())
 	updatedAt DateTime @updatedAt
 }
@@ -24,6 +79,85 @@ model Product {
 
 	name String
 	imageUrl String
+
+	ingredients Ingredient[] // relation Product <--> Ingredient (many to many)
+	variations Variation[] // relation Product <--> Variation (one to many)
+
+	category Category @relation(fields: [categoryId], references: [id]) // relation Category <--> Products (one to many)
+	categoryId Int
+
 	createdAt DateTime @default(now())
 	updatedAt DateTime @updatedAt
 }
+
+// for all products
+model Variation { 
+	id Int @id @default(autoincrement())
+
+	price Int
+	size Int?
+	pizzaType Int?
+	cartItems CartItem[] // relation Variation <--> CartItem (one to many)
+
+	product Product @relation(fields: [productId], references: [id]) // relation Product <--> Variation (one to many)
+	productId Int
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+model Ingredient {
+	id Int @id @default(autoincrement())
+
+	name String
+	price Int
+	imageUrl String
+
+	products Product[] // relation Product <--> Ingredient (many to many)
+	cartItems CartItem[] // relation Ingredient <--> CartItem (many to many)
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+// Information for DB about orders users
+enum OrderStatus {
+	PENDING
+	SUCCEEDED
+	CANCELLED
+}
+
+model Order {
+	id Int @id @default(autoincrement())
+	token String
+	totalAmount Int
+	status OrderStatus
+	paymentId String? // for return money user in bank system
+
+	items Json
+
+	fullName String
+	address String
+	email String
+	phone String
+	comment String?
+
+	user User? @relation(fields: [userId], references: [id]) // relation User <--> Order (one to many)
+	userId Int?
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+model VerificationCode {
+	id Int @id @default(autoincrement())
+
+	code String
+	
+	user User @relation(fields: [userId], references: [id]) // relation User <--> VerificationCode (one to one)
+	userId Int @unique
+
+	createdAt DateTime @default(now())
+	@@unique([userId, code]) // group. So that the same code isn't recreated
+}
+
