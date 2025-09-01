@@ -21,6 +21,7 @@ model User {
 	email String @unique
 	password String @unique
 	role UserRole @default(USER)
+	verified DateTime
 
 	provider String? // register through GitHub, gmail and etc social media
 	providerId String?
