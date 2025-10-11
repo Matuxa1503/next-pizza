@@ -1,7 +1,7 @@
 'use client';
 import { FC, useState } from 'react';
 import { FilterCheckbox, FilterCheckboxProps } from './Filter-checkbox';
-import { Input } from '../ui';
+import { Input, Skeleton } from '../ui';
 
 type Item = FilterCheckboxProps;
 
@@ -11,8 +11,11 @@ interface Props {
   defaultItems: Item[];
   limit?: number;
   searchInputPlaceholder?: string;
-  onChange?: (values: string[]) => void;
+  onClickCheckbox?: (id: string) => void;
   defaultValue?: string[];
+  selectedIds?: Set<string>;
+  name?: string;
+  loading?: boolean;
   className?: string;
 }
 
@@ -21,8 +24,11 @@ export const CheckboxFiltersGroup: FC<Props> = ({
   items,
   defaultItems,
   limit = 5,
+  loading,
   searchInputPlaceholder = 'Поиск...',
-  onChange,
+  onClickCheckbox,
+  selectedIds,
+  name,
   defaultValue,
   className,
 }) => {
@@ -33,7 +39,25 @@ export const CheckboxFiltersGroup: FC<Props> = ({
     setSearchValue(e.target.value);
   };
 
+  const onChangeOpen = () => {
+    setShowAll(!showAll);
+    setSearchValue('');
+  };
+
   const list = showAll ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLowerCase())) : defaultItems.slice(0, limit);
+
+  if (loading) {
+    return (
+      <div className={className}>
+        <p className="font-bold mb-3">{title}</p>
+
+        {...Array(limit)
+          .fill(0)
+          .map((_, ind) => <Skeleton key={ind} className="h-6 mb-4 rounded-[8px]" />)}
+        <Skeleton className="w-28 h-6 mb-4 rounded-[8px]" />
+      </div>
+    );
+  }
 
   return (
     <div className={className}>
@@ -50,16 +74,17 @@ export const CheckboxFiltersGroup: FC<Props> = ({
             key={index}
             text={item.text}
             value={item.value}
+            name={name}
             endAdornment={item.endAdornment}
-            checked={false}
-            onCheckedChange={(ids) => console.log(ids)}
+            checked={selectedIds?.has(item.value)}
+            onCheckedChange={() => onClickCheckbox?.(item.value)}
           />
         ))}
       </div>
 
       {items.length > limit && (
         <div className={showAll ? 'border-t border-t-neutral-100 mt-4' : ''}>
-          <button onClick={() => setShowAll(!showAll)} className="text-primary mt-3 cursor-pointer">
+          <button onClick={() => onChangeOpen()} className="text-primary mt-3 cursor-pointer">
             {showAll ? 'Скрыть' : '+ Показать все'}
           </button>
         </div>

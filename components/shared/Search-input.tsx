@@ -28,10 +28,15 @@ export const SearchInput: FC<Props> = ({ className }) => {
     setFocused(false);
   });
 
-  // protection from a large number of requests
+  // 1) Get request for products 2) Protection from a large number of requests
   useDebounce(
-    () => {
-      Api.products.search(searchQuery).then((items) => setProducts(items));
+    async () => {
+      try {
+        const items = await Api.products.search(searchQuery);
+        setProducts(items);
+      } catch (err) {
+        console.log(err);
+      }
     },
     250,
     [searchQuery]
