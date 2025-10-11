@@ -11,8 +11,6 @@ interface Props {
   className?: string;
 }
 
-console.log('da');
-
 export const Filters: FC<Props> = ({ className }) => {
   const { ingredients, loading } = useIngredients();
   const filters = useFilters();

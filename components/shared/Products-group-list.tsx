@@ -35,7 +35,13 @@ export const ProductsGroupList: FC<Props> = ({ title, items, listClassName, cate
 
       <div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
         {items.map((product) => (
-          <ProductCard key={product.id} id={product.id} name={product.name} imageUrl={product.imageUrl} price={product.items[0].price} />
+          <ProductCard
+            key={product.id}
+            id={product.id}
+            name={product.name}
+            imageUrl={product.imageUrl}
+            price={product.variations[0].price}
+          />
         ))}
       </div>
     </div>
