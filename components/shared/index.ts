@@ -1,3 +1,4 @@
+export { GroupVariants } from './Group-variants';
 export { SearchInput } from './Search-input';
 export { Header } from './Header';
 export { Container } from './Container';
@@ -7,3 +8,4 @@ export { SortPopup } from './Sort-popup';
 export { FilterCheckbox } from './Filter-checkbox';
 export { Filters } from './Filters';
 export { TopBar } from './Top-bar';
+export { ProductImage } from './Product-image';
