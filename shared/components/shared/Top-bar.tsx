@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { FC } from 'react';
 import { Container } from './Container';
 import { Categories } from './Categories';

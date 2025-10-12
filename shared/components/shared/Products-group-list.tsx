@@ -1,10 +1,10 @@
 'use client';
 import { FC, useEffect, useRef } from 'react';
 import { Title } from './Title';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useIntersection } from 'react-use';
 import { ProductCard } from './Product-card';
-import { useCategoryStore } from '@/store/category';
+import { useCategoryStore } from '@/shared/store/category';
 
 interface Props {
   title: string;

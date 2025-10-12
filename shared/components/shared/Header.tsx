@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { FC } from 'react';
 import Image from 'next/image';
 import { Button } from '../ui';
