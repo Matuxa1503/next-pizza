@@ -1,3 +1,4 @@
+export { ChooseProductForm } from './Choose-product-form';
 export { GroupVariants } from './Group-variants';
 export { SearchInput } from './Search-input';
 export { Header } from './Header';
@@ -8,4 +9,5 @@ export { SortPopup } from './Sort-popup';
 export { FilterCheckbox } from './Filter-checkbox';
 export { Filters } from './Filters';
 export { TopBar } from './Top-bar';
-export { ProductImage } from './Product-image';
+export { PizzaImage } from './Pizza-image';
+export * from './modals';
