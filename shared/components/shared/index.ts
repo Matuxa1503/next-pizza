@@ -11,4 +11,6 @@ export { FilterCheckbox } from './Filter-checkbox';
 export { Filters } from './Filters';
 export { TopBar } from './Top-bar';
 export { PizzaImage } from './Pizza-image';
+export { CartButton } from './Cart-button';
+export { CartDrawer } from './Cart-drawer';
 export * from './modals';
