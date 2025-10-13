@@ -1,3 +1,4 @@
+export { IngredientItem } from './Ingredient-item';
 export { ChooseProductForm } from './Choose-product-form';
 export { GroupVariants } from './Group-variants';
 export { SearchInput } from './Search-input';
