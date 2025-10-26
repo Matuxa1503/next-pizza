@@ -8,6 +8,7 @@ import { Variation } from '@prisma/client';
 interface ReturnProps {
   size: PizzaSize;
   type: PizzaType;
+  currentVariationId?: number;
   selectedIngredients: Set<number>;
   availablePizzaSizes: Variant[];
   addIngredients: (id: number) => void;
@@ -23,6 +24,8 @@ export const usePizzaOptions = (variations: Variation[]): ReturnProps => {
   const [selectedIngredients, { toggle: addIngredients }] = useSet(new Set<number>([]));
   const availablePizzaSizes = getAvailablePizzaSizes(variations, type);
 
+  const currentVariationId = variations.find((item) => item.pizzaType === type && item.size === size)?.id;
+
   // switch available size
   useEffect(() => {
     const isAvailableSize = availablePizzaSizes.find((item) => Number(item.value) === size && !item.disabled);
@@ -36,6 +39,7 @@ export const usePizzaOptions = (variations: Variation[]): ReturnProps => {
   return {
     size,
     type,
+    currentVariationId,
     selectedIngredients,
     availablePizzaSizes,
     addIngredients,

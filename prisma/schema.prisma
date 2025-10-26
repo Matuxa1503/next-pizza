@@ -51,7 +51,7 @@ model Cart {
 model CartItem {
 	id Int @id @default(autoincrement())
 
-	quantity Int
+	quantity Int @default(1)
 
 	variationItem Variation? @relation(fields: [variationId], references: [id]) // relation Variation <--> CartItem (one to many)
 	variationId Int
@@ -91,7 +91,7 @@ model Product {
 	updatedAt DateTime @updatedAt
 }
 
-// for all products
+// for all products (ProductItem)
 model Variation { 
 	id Int @id @default(autoincrement())
 

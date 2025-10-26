@@ -12,10 +12,11 @@ interface Props {
   className?: string;
 }
 
-export const ChooseProductForm: FC<Props> = ({ name, imageUrl, price, onSubmit, className, loading }) => {
-  const textDetaills = '30см, традиционное тесто 30';
-  const totalPrice = 250;
+/**
+ * Форма продукта
+ */
 
+export const ChooseProductForm: FC<Props> = ({ name, imageUrl, price, onSubmit, className, loading }) => {
   return (
     <div className={cn(className, 'flex flex-1')}>
       <div className="flex items-center justify-center flex-1 relative w-full">
@@ -24,10 +25,9 @@ export const ChooseProductForm: FC<Props> = ({ name, imageUrl, price, onSubmit, 
 
       <div className="w-[490px] bg-[#f7f6f5] p-7">
         <Title text={name} size="md" className="font-extrabold mb-1" />
-        <p className="text-gray-400">{textDetaills}</p>
 
-        <Button loading={loading} className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
-          Добавить в корзину за {totalPrice} ₽
+        <Button onClick={onSubmit} loading={loading} className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+          Добавить в корзину за {price} ₽
         </Button>
       </div>
     </div>

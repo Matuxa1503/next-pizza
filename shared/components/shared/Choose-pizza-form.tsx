@@ -18,18 +18,23 @@ interface Props {
   ingredients: Ingredient[];
   variations: Variation[];
   loading?: boolean;
-  // onSubmit: (itemId: number, ingredients: number[]) => void;
-  onClickAddCart: () => void;
+  onSubmit: (variationId: number, ingredients: number[]) => void;
   className?: string;
 }
 
-export const ChoosePizzaForm: FC<Props> = ({ name, variations, imageUrl, ingredients, loading, onClickAddCart, className }) => {
-  const { size, type, selectedIngredients, availablePizzaSizes, addIngredients, setSize, setType } = usePizzaOptions(variations);
+/**
+ * Форма выбора пиццы
+ */
+
+export const ChoosePizzaForm: FC<Props> = ({ name, variations, imageUrl, ingredients, loading, onSubmit, className }) => {
+  const { size, type, selectedIngredients, currentVariationId, availablePizzaSizes, addIngredients, setSize, setType } =
+    usePizzaOptions(variations);
   const { totalPrice, textDetaills } = getPizzaDetails(type, size, variations, ingredients, selectedIngredients);
 
   const handleSubmit = () => {
-    console.log({ size, type, totalPrice, ingredients: selectedIngredients });
-    // onClickAddCart();
+    if (currentVariationId) {
+      onSubmit(currentVariationId, Array.from(selectedIngredients));
+    }
   };
 
   return (
