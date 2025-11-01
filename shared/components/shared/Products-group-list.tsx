@@ -5,10 +5,11 @@ import { cn } from '@/shared/lib/utils';
 import { useIntersection } from 'react-use';
 import { ProductCard } from './Product-card';
 import { useCategoryStore } from '@/shared/store';
+import { ProductWithRelations } from '@/@types/prisma';
 
 interface Props {
   title: string;
-  items: any[];
+  items: ProductWithRelations[];
   categoryId: number;
   className?: string;
   listClassName?: string;
@@ -16,15 +17,14 @@ interface Props {
 
 export const ProductsGroupList: FC<Props> = ({ title, items, listClassName, categoryId, className }) => {
   const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
-  const intersectionRef = useRef(null);
-  const intersection = useIntersection(intersectionRef, {
+  const intersectionRef = useRef<HTMLDivElement>(null);
+  const intersection = useIntersection(intersectionRef as React.RefObject<HTMLElement>, {
     threshold: 0.4,
   });
 
   useEffect(() => {
     // отслеживание текущей категории товаров
     if (intersection?.isIntersecting) {
-      console.log(title, categoryId);
       setActiveCategoryId(categoryId);
     }
   }, [intersection?.isIntersecting]);
@@ -40,6 +40,7 @@ export const ProductsGroupList: FC<Props> = ({ title, items, listClassName, cate
             id={product.id}
             name={product.name}
             imageUrl={product.imageUrl}
+            ingredients={product.ingredients}
             price={product.variations[0].price}
           />
         ))}
