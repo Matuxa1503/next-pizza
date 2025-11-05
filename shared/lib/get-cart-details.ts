@@ -15,14 +15,14 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
     name: item.variationItem.product.name,
     imageUrl: item.variationItem.product.imageUrl,
     price: calcCartItemTotalPrice(item),
-    // disabled: item.variationItem.disabled,
     pizzaSize: item.variationItem.size,
     pizzaType: item.variationItem.pizzaType,
+    disabled: false,
     ingredients: item.ingredients.map((ingredient) => ({
       name: ingredient.name,
       price: ingredient.price,
     })),
-  }));
+  })) as CartStateItem[];
 
   return {
     totalAmount: data.totalAmount,

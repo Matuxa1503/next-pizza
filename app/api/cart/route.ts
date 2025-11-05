@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         variationId: data.variationId,
         ingredients: {
           every: {
-            id: { in: data.ingredients }, // check ingredients in CartItem
+            id: { in: data.ingredients }, // check ingredients in CartItem. Prisma не умеет правильно обрабатывать этот запрос. Поэтому только через костыль можно решить проблему
           },
         },
       },

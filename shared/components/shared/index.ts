@@ -13,4 +13,5 @@ export { TopBar } from './Top-bar';
 export { PizzaImage } from './Pizza-image';
 export { CartButton } from './Cart-button';
 export { CartDrawer } from './Cart-drawer';
+export { ProductForm } from './Product-form';
 export * from './modals';

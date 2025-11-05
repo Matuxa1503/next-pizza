@@ -15,7 +15,6 @@ interface Props {
 }
 
 export const ProductCard: FC<Props> = ({ id, name, price, imageUrl, ingredients, className }) => {
-  console.log(ingredients);
   return (
     <div className={className}>
       <Link href={`/product/${id}`}>
