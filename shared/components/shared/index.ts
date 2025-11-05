@@ -14,4 +14,6 @@ export { PizzaImage } from './Pizza-image';
 export { CartButton } from './Cart-button';
 export { CartDrawer } from './Cart-drawer';
 export { ProductForm } from './Product-form';
+export { WhiteBlock } from './White-block';
+export { CheckoutItemDetails } from './Checkout-item-details';
 export * from './modals';
