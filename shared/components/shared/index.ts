@@ -17,4 +17,5 @@ export { ProductForm } from './Product-form';
 export { WhiteBlock } from './White-block';
 export { CheckoutItemDetails } from './Checkout-item-details';
 export { CheckoutItem } from './Checkout-item';
+export { CheckoutItemSkeleton } from './Checkout-item-skeleton';
 export * from './modals';
