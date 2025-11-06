@@ -2,17 +2,18 @@ import { cn } from '@/shared/lib/utils';
 import { WhiteBlock } from './White-block';
 import { CheckoutItemDetails } from './Checkout-item-details';
 import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
-import { Button } from '../ui';
+import { Button, Skeleton } from '../ui';
 import { FC } from 'react';
 
 interface Props {
   totalAmount: number;
+  loading?: boolean;
 }
 
 const VAT = 15; // захардкодили данные
 const DELIVERY_PRICE = 250; // захардкодили данные
 
-export const CheckoutSidebar: FC<Props> = ({ totalAmount }) => {
+export const CheckoutSidebar: FC<Props> = ({ totalAmount, loading }) => {
   const vatPrice = (totalAmount * VAT) / 100;
   const totalPrice = totalAmount + DELIVERY_PRICE + vatPrice;
 
@@ -20,7 +21,7 @@ export const CheckoutSidebar: FC<Props> = ({ totalAmount }) => {
     <WhiteBlock className={cn('p-6 sticky top-4')}>
       <div className="flex flex-col gap-1">
         <span className="text-xl">Итого:</span>
-        <span className="h-11 text-[34px] font-extrabold">{totalPrice} ₽</span>
+        {loading ? <Skeleton className="h-11 w-48" /> : <span className="h-11 text-[34px] font-extrabold">{totalPrice} ₽</span>}
       </div>
 
       <CheckoutItemDetails
@@ -30,7 +31,7 @@ export const CheckoutSidebar: FC<Props> = ({ totalAmount }) => {
             Стоимость корзины:
           </div>
         }
-        value={`${totalAmount} ₽`}
+        value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${totalAmount} ₽`}
       />
 
       <CheckoutItemDetails
@@ -40,7 +41,7 @@ export const CheckoutSidebar: FC<Props> = ({ totalAmount }) => {
             Налоги:
           </div>
         }
-        value={`${vatPrice} ₽`}
+        value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${vatPrice} ₽`}
       />
 
       <CheckoutItemDetails
@@ -50,7 +51,7 @@ export const CheckoutSidebar: FC<Props> = ({ totalAmount }) => {
             Доставка:
           </div>
         }
-        value={`${DELIVERY_PRICE} ₽`}
+        value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${DELIVERY_PRICE} ₽`}
       />
 
       <Button type="submit" className="w-full h-14 rounded-2xl mt-6 text-base font-bold">
