@@ -22,5 +22,6 @@ export { CheckoutSidebar } from './Checkout-sidebar';
 export { RequiredSymbol } from './Required-symbol';
 export { ErrorText } from './Error-text';
 export { ClearButton } from './Clear-button';
+export { PayOrderTemplate } from './email-templates/pay-order';
 export * from './modals';
 export * from './form-components';
