@@ -3,7 +3,7 @@
 import { prisma } from '@/prisma/prisma-client';
 import { PayOrderTemplate } from '@/shared/components/shared';
 import { CheckoutFormValues } from '@/shared/constants';
-import { sendEmail } from '@/shared/lib';
+import { createPayment, sendEmail } from '@/shared/lib';
 import { OrderStatus } from '@prisma/client';
 import { cookies } from 'next/headers';
 
@@ -36,10 +36,12 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
+    /* Если корзина не найдена возращаем ошибку */
     if (!userCart) {
       throw new Error('Cart not found');
     }
 
+    /* Если корзина пустая возращаем ошибку */
     if (userCart?.totalAmount === 0) {
       throw new Error('Cart is empty');
     }
@@ -76,14 +78,41 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
-    // отправка письма на почту
+    // не работает Юкасса т.к проблема с регистрацией (18:39:00) ---------------------------
+    // создаем новый платеж
+    // const paymentData = await createPayment({
+    //   amount: order.totalAmount,
+    //   orderId: order.id,
+    //   description: 'Оплата заказа #' + order.id,
+    // });
+
+    // if (!paymentData) {
+    //   throw new Error('Payment data not found');
+    // }
+
+    // await prisma.order.update({
+    //   where: {
+    //     id: order.id,
+    //   },
+    //   data: {
+    //     paymentId: paymentData.id, // id юкассы (Для возврата денег при отмене заказа)
+    //   },
+    // });
+    // const paymentUrl = paymentData.confirmation.confirmation_url;
+
+    // отправка письма на почту и редирект на Юкассу
+    // await sendEmail(
+    //   data.email,
+    //   'Next pizza / оплатите заказ #' + order.id,
+    //   PayOrderTemplate({ orderId: order.id, totalAmount: order.totalAmount, paymentUrl })
+    // );
+    // --------------------------------------------------------------------------------------
+
     await sendEmail(
       data.email,
       'Next pizza / оплатите заказ #' + order.id,
-      PayOrderTemplate({ orderId: order.id, totalAmount: order.totalAmount, paymentUrl: 'https://resend.com/docs/send-with-nextjs' })
+      PayOrderTemplate({ orderId: order.id, totalAmount: order.totalAmount, paymentUrl: '' })
     );
-
-    // return
   } catch (err) {
     console.log('[Create Order]', err);
   }
