@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 
 export default function CheckoutPage() {
-  const { items, totalAmount, updateItemQuantity, addCartItem, removeCartItem, loading } = useCart();
+  const { items, totalAmount, updateItemQuantity, removeCartItem, loading } = useCart();
   const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<CheckoutFormValues>({

@@ -3,7 +3,7 @@
 import { prisma } from '@/prisma/prisma-client';
 import { PayOrderTemplate } from '@/shared/components/shared';
 import { CheckoutFormValues } from '@/shared/constants';
-import { createPayment, sendEmail } from '@/shared/lib';
+import { createPayment, createStripePayment, sendEmail } from '@/shared/lib';
 import { OrderStatus } from '@prisma/client';
 import { cookies } from 'next/headers';
 
@@ -108,11 +108,34 @@ export async function createOrder(data: CheckoutFormValues) {
     // );
     // --------------------------------------------------------------------------------------
 
+    // Stripe (аналог Юкассы)
+    const session = await createStripePayment({
+      amount: order.totalAmount,
+      orderId: order.id,
+      description: 'Оплата заказа #' + order.id,
+    });
+
+    if (!session) {
+      throw new Error('Session not found');
+    }
+
+    await prisma.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        paymentId: session.id, // id stripe
+      },
+    });
+    const paymentUrl = session.url!;
+
     await sendEmail(
       data.email,
       'Next pizza / оплатите заказ #' + order.id,
-      PayOrderTemplate({ orderId: order.id, totalAmount: order.totalAmount, paymentUrl: '' })
+      PayOrderTemplate({ orderId: order.id, totalAmount: order.totalAmount, paymentUrl })
     );
+
+    return paymentUrl;
   } catch (err) {
     console.log('[Create Order]', err);
   }
